@@ -53,7 +53,7 @@ public partial class AppController : Node2D, IAppController {
 
     public void Setup() {
         Instantiator = new Instantiator(GetTree());
-
+        AppControllerLogic = new AppControllerLogic();
         // Instantiate Repositories here
         this.Provide();
     }
