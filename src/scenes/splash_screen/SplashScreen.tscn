@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://dm1cp8berlnc4"]
+
+[ext_resource type="Script" uid="uid://bc4x0lh7v7vhy" path="res://src/scenes/splash_screen/SplashScreen.cs" id="1_0h33m"]
+[ext_resource type="Texture2D" uid="uid://bx603oua0dw45" path="res://assets/ship_test.png" id="1_qjrpf"]
+
+[node name="SplashScreen" type="Node2D"]
+script = ExtResource("1_0h33m")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(343, 423)
+scale = Vector2(6.53947, 6.88775)
+texture = ExtResource("1_qjrpf")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 241.0
+offset_top = 59.0
+offset_right = 470.0
+offset_bottom = 205.0
+text = "KAZEMIMA
+PRODUCTIONS
+PRESENTS"
+horizontal_alignment = 1
+
+[node name="SplashScreenTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 1.5
+one_shot = true
+autostart = true

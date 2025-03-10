@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3 uid="uid://binl0mbtagfe8"]
+
+[ext_resource type="Script" uid="uid://dv01mclj71nqo" path="res://src/scenes/main_menu/MainMenu.cs" id="1_hefq1"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_hefq1")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_left = 208.0
+offset_top = 20.0
+offset_right = 502.0
+offset_bottom = 65.0
+text = "Main Menu"
+horizontal_alignment = 1
+
+[node name="NewGameButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 266.0
+offset_top = 143.0
+offset_right = 451.0
+offset_bottom = 204.0
+text = "New Game"
+
+[node name="SettingsButton" type="Button" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 266.0
+offset_top = 238.0
+offset_right = 451.0
+offset_bottom = 299.0
+text = "Settings"

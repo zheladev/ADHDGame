@@ -14,6 +14,10 @@ public interface IAppController : INode2D {
 public partial class AppController : Node2D, IAppController {
     public override void _Notification(int what) => this.Notify(what);
 
+    public const string SPLASH_SCREEN_SCENE_PATH = "res://src/scenes/splash_screen/SplashScreen.tscn";
+    public const string SETTINGS_MENU_SCENE_PATH = "res://src/scenes/settings_menu/SettingsMenu.tscn";
+    public const string MAIN_MENU_SCENE_PATH = "res://src/scenes/main_menu/MainMenu.tscn";
+
     #region Nodes
     // AutoInjected child nodes go here.
     // Example:
@@ -29,6 +33,7 @@ public partial class AppController : Node2D, IAppController {
 
 
     #region State
+    private Node LoadedScene { get; set; } = default!;
     // Define node state variables here
     // private bool _isRightMouseButtonHeld;
     public IAppControllerLogic AppControllerLogic { get; set; } = default!;
@@ -55,6 +60,9 @@ public partial class AppController : Node2D, IAppController {
         Instantiator = new Instantiator(GetTree());
         AppControllerLogic = new AppControllerLogic();
         // Instantiate Repositories here
+
+
+
         this.Provide();
     }
 
@@ -73,12 +81,25 @@ public partial class AppController : Node2D, IAppController {
 
 
     private void ShowSplashScreen() {
-        GD.Print("Showing splash Screen.");
-        AppControllerLogic.Input(new AppControllerLogic.Input.ShowMainMenu());
+        LoadedScene?.QueueFree();
+        var splashScreen = Instantiator.LoadAndInstantiate<SplashScreen>(SPLASH_SCREEN_SCENE_PATH);
+        AddChild(splashScreen);
+        splashScreen.Show();
+        Instantiator.SceneTree.Paused = false;
+        GD.Print("Adding shit");
+        splashScreen.OnSplashScreenFinished += OnSplashScreenTimerTimeout;
+        GD.Print("Added shit");
+        LoadedScene = splashScreen;
     }
 
     private void ShowMainMenu() {
-        // Show main menu
+        LoadedScene?.QueueFree();
+        GD.Print("Main menu entered");
+        var mainMenu = Instantiator.LoadAndInstantiate<MainMenu>(MAIN_MENU_SCENE_PATH);
+        AddChild(mainMenu);
+        mainMenu.Show();
+        Instantiator.SceneTree.Paused = false;
+        LoadedScene = mainMenu;
     }
 
     private void ShowInGame() {
@@ -93,6 +114,6 @@ public partial class AppController : Node2D, IAppController {
         // Start new game
     }
 
-
+    private void OnSplashScreenTimerTimeout() => AppControllerLogic.Input(new AppControllerLogic.Input.ShowMainMenu());
 }
 

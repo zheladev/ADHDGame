@@ -16,6 +16,7 @@ ADHDGame_Scenes_AppController_AppControllerLogic_State_SettingsMenu --> ADHDGame
 ADHDGame_Scenes_AppController_AppControllerLogic_State_SplashScreen --> ADHDGame_Scenes_AppController_AppControllerLogic_State_MainMenu : ShowMainMenu
 ADHDGame_Scenes_AppController_AppControllerLogic_State_StartNewGame --> ADHDGame_Scenes_AppController_AppControllerLogic_State_InGame : EnterInGame
 
+ADHDGame_Scenes_AppController_AppControllerLogic_State_MainMenu : OnEnterHandler() → ShowMainMenu
 ADHDGame_Scenes_AppController_AppControllerLogic_State_SplashScreen : OnEnter → ShowSplashScreen
 
 [*] --> ADHDGame_Scenes_AppController_AppControllerLogic_State_SplashScreen
