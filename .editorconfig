@@ -43,7 +43,7 @@ root = true
 [*]
 charset = utf-8
 indent_style = space
-indent_size = 2
+indent_size = 4
 insert_final_newline = true
 trim_trailing_whitespace = true
 
@@ -214,9 +214,9 @@ dotnet_code_quality.CA1822.api_surface = private
 # .NET Unnecessary code rules
 [*.{cs,csx,cake,vb,vbx}]
 
-dotnet_code_quality_unused_parameters = non_public:suggestion
-dotnet_remove_unnecessary_suppression_exclusions = none
-dotnet_diagnostic.IDE0079.severity = warning
+# dotnet_code_quality_unused_parameters = non_public:suggestion
+# dotnet_remove_unnecessary_suppression_exclusions = none
+# dotnet_diagnostic.IDE0079.severity = warning
 
 # C# Unnecessary code rules
 [*.{cs,csx,cake}]
@@ -239,6 +239,8 @@ dotnet_diagnostic.RCS1163.severity = none
 # Don't remove methods that are unused.
 dotnet_diagnostic.IDE0051.severity = none
 dotnet_diagnostic.RCS1213.severity = none
+
+dotnet_diagnostic.IDE0028.severity = none
 
 # Use discard variable for unused expression values.
 csharp_style_unused_value_expression_statement_preference = discard_variable
@@ -416,6 +418,7 @@ dotnet_naming_symbols.unspecified.applicable_accessibilities = *
 
 # Allow using keywords as names
 # dotnet_diagnostic.CA1716.severity = none
+dotnet_diagnostic.CS8618.severity = none
 # Don't require culture info for ToString()
 dotnet_diagnostic.CA1304.severity = none
 # Don't require a string comparison for comparing strings.
@@ -456,9 +459,3 @@ dotnet_diagnostic.RCS1161.severity = none
 dotnet_diagnostic.RCS1165.severity = none
 # Allow keyword-based names so that parameter names like `@event` can be used.
 dotnet_diagnostic.CA1716.severity = none
-# Allow nested ternary operators
-dotnet_diagnostic.RCS1238.severity = none
-# Allow simple if expressions for clarity
-dotnet_diagnostic.IDE0046.severity = none
-# Allow "unnecessary" blank lines for comments
-dotnet_diagnostic.RCS1036.severity = none

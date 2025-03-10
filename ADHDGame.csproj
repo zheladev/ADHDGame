@@ -31,9 +31,13 @@
   <ItemGroup Condition=" '$(Configuration)' == 'Debug' or '$(Configuration)' == 'ExportDebug' ">
     <!-- Test dependencies go here! -->
     <!-- Dependencies added here will not be included in release builds. -->
+    <PackageReference Include="Chickensoft.AutoInject" Version="2.5.0" />
     <PackageReference Include="Chickensoft.GoDotTest" Version="1.6.2" />
     <!-- Used to drive test scenes when testing visual code -->
     <PackageReference Include="Chickensoft.GodotTestDriver" Version="3.0.2" />
+    <PackageReference Include="Chickensoft.Introspection.Generator" Version="2.2.0" />
+    <PackageReference Include="Chickensoft.LogicBlocks" Version="5.16.0" />
+    <PackageReference Include="Chickensoft.LogicBlocks.DiagramGenerator" Version="5.16.0" />
     <!-- Bring your own assertion library for tests! -->
     <!-- We're using Shouldly for this example, but you can use anything. -->
     <PackageReference Include="Shouldly" Version="4.3.0" />
