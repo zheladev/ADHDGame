@@ -1,23 +1,23 @@
 namespace ADHDGame;
 
+using ADHDGame.Utils;
 using Chickensoft.AutoInject;
 using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
 
-public interface IPlayerShip : ICharacterBody2D {
+public interface IAppController : INode2D {
     // Define exposed functions and properties here.
 }
 
 [Meta(typeof(IAutoNode))]
-public partial class PlayerShip : CharacterBody2D, IPlayerShip {
+public partial class AppController : Node2D, IAppController {
     public override void _Notification(int what) => this.Notify(what);
 
     #region Nodes
     // AutoInjected child nodes go here.
     // Example:
     // [Node] public IArea2D ExampleArea { get; set; } = default!;
-    [Node] public ICollisionShape2D ShipCollisionShape { get; set; } = default!;
     #endregion Nodes
 
     #region Signals
@@ -34,16 +34,12 @@ public partial class PlayerShip : CharacterBody2D, IPlayerShip {
     #endregion State
 
     #region External
-    // Non-godot vars go here
-    // Example:
-    // public IInstantiator Instantiator { get; set; } = default!;
+    public IInstantiator Instantiator { get; set; } = default!;
     #endregion External
 
 
     #region Provisions
-    // Provisions go here. These are exposed to children and can be retrieved
-    // using dependencies. Check Dependencies region for an example.
-    // Example:
+    // TODO: Provide all repositories
     // IGameRepository IProvide<IGameRepository>.Value() => GameRepository;
     #endregion Provisions
 
