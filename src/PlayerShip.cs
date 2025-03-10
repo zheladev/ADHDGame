@@ -1,8 +1,3 @@
-// meta-name: Auto2DNode
-// meta-description: Empty 2D node with AutoInject and blank Interface
-// meta-default: true
-// meta-space-indent: 4
-
 namespace ADHDGame;
 
 using Chickensoft.AutoInject;
@@ -10,20 +5,19 @@ using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
 
-public interface I_CLASS_ : I_BASE_
-{
+public interface IPlayerShip : ICharacterBody2D {
     // Define exposed functions and properties here.
 }
 
 [Meta(typeof(IAutoNode))]
-public partial class _CLASS_ : _BASE_, I_CLASS_
-{
+public partial class PlayerShip : CharacterBody2D, IPlayerShip {
     public override void _Notification(int what) => this.Notify(what);
 
     #region Nodes
     // AutoInjected child nodes go here.
     // Example:
     // [Node] public IArea2D ExampleArea { get; set; } = default!;
+    [Node] public ICollisionShape2D ShipCollisionShape { get; set; } = default!;
     #endregion Nodes
 
     #region Signals
@@ -59,8 +53,7 @@ public partial class _CLASS_ : _BASE_, I_CLASS_
     // [Dependency] public IGameRepository GameRepository => this.DependOn<GameRepository>();
     #endregion Dependencies
 
-    public void Setup()
-    {
+    public void Setup() {
         // instantiation of objects and context setup
     }
 
@@ -68,3 +61,4 @@ public partial class _CLASS_ : _BASE_, I_CLASS_
 
     public void OnExitTree() { }
 }
+
