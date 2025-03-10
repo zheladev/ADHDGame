@@ -32,7 +32,6 @@
           //   cd netcoredbg
           //   mkdir build
           //   cd build
-          //   CC=clang CXX=clang++ cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../bin
           //
           // In your ~/.zshrc file, add the following line and adjust the path:
           //

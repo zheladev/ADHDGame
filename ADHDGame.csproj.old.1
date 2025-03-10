@@ -1,4 +1,4 @@
-<Project Sdk="Godot.NET.Sdk/4.4.0">
+<Project Sdk="Godot.NET.Sdk/4.3.0">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
@@ -32,7 +32,6 @@
     <!-- Test dependencies go here! -->
     <!-- Dependencies added here will not be included in release builds. -->
     <PackageReference Include="Chickensoft.AutoInject" Version="2.5.0" />
-    <PackageReference Include="Chickensoft.GodotNodeInterfaces" Version="2.4.0" />
     <PackageReference Include="Chickensoft.GoDotTest" Version="1.6.2" />
     <!-- Used to drive test scenes when testing visual code -->
     <PackageReference Include="Chickensoft.GodotTestDriver" Version="3.0.2" />
@@ -51,7 +50,4 @@
     <!-- Production dependencies go here! -->
     <PackageReference Include="Chickensoft.GameTools" Version="2.0.3" />
   </ItemGroup>
-  <ItemGroup>
-   <Compile Remove="script_templates/**/*.cs" />
-</ItemGroup>
 </Project>

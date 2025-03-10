@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://cywpu6lxdjhuu"]
 
-[ext_resource type="Script" path="res://src/Game.cs" id="1_17mmo"]
+[ext_resource type="Script" uid="uid://dctmw5620r6pj" path="res://src/Game.cs" id="1_17mmo"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
