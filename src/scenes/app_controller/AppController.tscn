@@ -1,3 +1,6 @@
-[gd_scene format=3 uid="uid://dggani7oju68r"]
+[gd_scene load_steps=2 format=3 uid="uid://dggani7oju68r"]
+
+[ext_resource type="Script" uid="uid://biujnygndvj23" path="res://src/scenes/app_controller/AppController.cs" id="1_kiuxw"]
 
 [node name="AppController" type="Node2D"]
+script = ExtResource("1_kiuxw")

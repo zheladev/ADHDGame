@@ -174,5 +174,9 @@
       "icon": "terminal-powershell",
       "source": "PowerShell"
     }
-  }
+  },
+  "files.exclude": {
+    "**/*.uid": true,
+  },
+  "dotnet.codeLens.enableReferencesCodeLens": false,
 }

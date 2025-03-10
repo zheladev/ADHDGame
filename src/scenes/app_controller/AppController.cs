@@ -1,4 +1,4 @@
-namespace ADHDGame;
+namespace ADHDGame.Scenes.AppController;
 
 using ADHDGame.Utils;
 using Chickensoft.AutoInject;
@@ -31,6 +31,8 @@ public partial class AppController : Node2D, IAppController {
     #region State
     // Define node state variables here
     // private bool _isRightMouseButtonHeld;
+    public IAppControllerLogic AppControllerLogic { get; set; } = default!;
+    public AppControllerLogic.IBinding AppControllerBinding { get; set; } = default!;
     #endregion State
 
     #region External
@@ -50,11 +52,47 @@ public partial class AppController : Node2D, IAppController {
     #endregion Dependencies
 
     public void Setup() {
-        // instantiation of objects and context setup
+        Instantiator = new Instantiator(GetTree());
+
+        // Instantiate Repositories here
+        this.Provide();
     }
 
-    public void OnReady() { }
+    public void OnReady() {
+        AppControllerBinding = AppControllerLogic.Bind();
 
-    public void OnExitTree() { }
+        AppControllerBinding
+            .Handle((in AppControllerLogic.Output.ShowSplashScreen _) => ShowSplashScreen())
+            .Handle((in AppControllerLogic.Output.ShowMainMenu _) => ShowMainMenu())
+            .Handle((in AppControllerLogic.Output.ShowInGame _) => ShowInGame())
+            .Handle((in AppControllerLogic.Output.LoadGameData _) => LoadGame())
+            .Handle((in AppControllerLogic.Output.NewGame _) => NewGame());
+
+        AppControllerLogic.Start();
+    }
+
+
+    private void ShowSplashScreen() {
+        GD.Print("Showing splash Screen.");
+        AppControllerLogic.Input(new AppControllerLogic.Input.ShowMainMenu());
+    }
+
+    private void ShowMainMenu() {
+        // Show main menu
+    }
+
+    private void ShowInGame() {
+        // Show in game
+    }
+
+    private void LoadGame() {
+        // Load game
+    }
+
+    private void NewGame() {
+        // Start new game
+    }
+
+
 }
 
