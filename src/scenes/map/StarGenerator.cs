@@ -7,21 +7,19 @@ using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
 
-public interface IStarGenerator : INode2D
-{
+public interface IStarGenerator : INode2D {
     // Define exposed functions and properties here.
 }
 
 [Meta(typeof(IAutoNode))]
-public partial class StarGenerator : Node2D, IStarGenerator
-{
+public partial class StarGenerator : Node2D, IStarGenerator {
     public override void _Notification(int what) => this.Notify(what);
 
-    [Export] private int starCount = 1000;
-    [Export] private float galaxyRadius = 500f;
-    [Export] private float centerConcentration = 0.5f;
+    [Export] private int _starCount = 1000;
+    [Export] private float _galaxyRadius = 500f;
+    [Export] private float _centerConcentration = 0.5f;
 
-    private Random random = new Random();
+    private readonly Random _random = new();
 
     #region Nodes
     // AutoInjected child nodes go here.
@@ -74,12 +72,10 @@ public partial class StarGenerator : Node2D, IStarGenerator
 
     public void OnExitTree() { }
 
-    private void GenerateStars()
-    {
-        for (int i = 0; i < starCount; i++)
-        {
+    private void GenerateStars() {
+        for (int i = 0; i < _starCount; i++) {
             // Generate polar coordinates
-            float angle = (float)random.NextDouble() * 2 * Mathf.Pi;
+            float angle = (float)_random.NextDouble() * 2 * Mathf.Pi;
             float radius = GenerateRadius();
 
             // Convert to Cartesian coordinates
@@ -91,24 +87,23 @@ public partial class StarGenerator : Node2D, IStarGenerator
         }
     }
 
-    private float GenerateRadius()
-    {
+    private float GenerateRadius() {
         // Normal distribution
-        float u1 = 1.0f - (float)random.NextDouble();
-        float u2 = 1.0f - (float)random.NextDouble();
+        float u1 = 1.0f - (float)_random.NextDouble();
+        float u2 = 1.0f - (float)_random.NextDouble();
         float randStdNormal = Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Sin(2.0f * Mathf.Pi * u2);
-        float radius = Mathf.Abs(randStdNormal) * galaxyRadius * centerConcentration;
+        float radius = Mathf.Abs(randStdNormal) * _galaxyRadius * _centerConcentration;
 
         // Radius doesn't exceed galaxy size
-        return Mathf.Min(radius, galaxyRadius);
+        return Mathf.Min(radius, _galaxyRadius);
     }
 
-    private void CreateStar(Vector2 position, Color color)
-    {
-        var star = new Sprite2D();
-        star.Position = position;
+    private void CreateStar(Vector2 position, Color color) {
+        var star = new Sprite2D {
+            Position = position
+        };
 
-        var image = Image.Create(16, 16, false, Image.Format.Rgba8);
+        var image = Image.CreateEmpty(16, 16, false, Image.Format.Rgba8);
         image.Fill(color);
 
         var texture = ImageTexture.CreateFromImage(image);
@@ -117,21 +112,36 @@ public partial class StarGenerator : Node2D, IStarGenerator
         AddChild(star);
     }
 
-    private Color GetStarColor()
-    {
-        float starType = (float)random.NextDouble();
+    private Color GetStarColor() {
+        float starType = (float)_random.NextDouble();
 
-        if (starType < 0.7f)
+        if (starType < 0.01f) // O-type (1%)
         {
-            return Colors.White;
+            return new Color("#00BFFF");
         }
-        else if (starType < 0.9f)
+        else if (starType < 0.05f) // B-type (4%)
         {
-            return Colors.Yellow;
+            return new Color("#87CEEB");
         }
-        else
+        else if (starType < 0.15f) // A-type (10%)
         {
-            return Colors.Blue;
+            return new Color("#F0F8FF");
+        }
+        else if (starType < 0.35f) // F-type (20%)
+        {
+            return new Color("#FFD700");
+        }
+        else if (starType < 0.65f) // G-type (30%)
+        {
+            return new Color("#FFC300");
+        }
+        else if (starType < 0.90f) // K-type (25%)
+        {
+            return new Color("#FF8C00");
+        }
+        else // M-type (10%)
+        {
+            return new Color("#FF4500");
         }
     }
 }
