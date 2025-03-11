@@ -4,7 +4,6 @@ using System;
 using ADHDGame.Repositories;
 using ADHDGame.Utils;
 using Chickensoft.AutoInject;
-using Chickensoft.Collections;
 using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
@@ -37,7 +36,7 @@ public partial class AppController : Node2D, IAppController {
 
 
     #region State
-    private readonly Blackboard _blackboard = new();
+    private Node _currentNode = default!;
     public IAppRepository AppRepository { get; set; } = default!;
     public IAppControllerLogic AppControllerLogic { get; set; } = default!;
     public AppControllerLogic.IBinding AppControllerBinding { get; set; } = default!;
@@ -76,19 +75,20 @@ public partial class AppController : Node2D, IAppController {
         AppControllerBinding
             // splash screen
             .Handle((in AppControllerLogic.Output.LoadSplashScreen _) => LoadSplashScreen())
-            .Handle((in AppControllerLogic.Output.UnloadSplashScreen _) => UnloadSplashScreen())
+            .Handle((in AppControllerLogic.Output.UnloadSplashScreen _) => UnloadCurrentScene())
             // main menu
             .Handle((in AppControllerLogic.Output.LoadMainMenu _) => LoadMainMenu())
-            .Handle((in AppControllerLogic.Output.UnloadMainMenu _) => UnloadMainMenu())
+            .Handle((in AppControllerLogic.Output.UnloadMainMenu _) => UnloadCurrentScene())
             // settings
             .Handle((in AppControllerLogic.Output.LoadSettingsMenu _) => LoadSettingsMenu())
-            .Handle((in AppControllerLogic.Output.UnloadSettingsMenu _) => UnloadSettingsMenu())
+            .Handle((in AppControllerLogic.Output.UnloadSettingsMenu _) => UnloadCurrentScene())
             // in game
             .Handle((in AppControllerLogic.Output.LoadGame _) => LoadGame())
-            .Handle((in AppControllerLogic.Output.UnloadGame _) => UnloadGame())
+            .Handle((in AppControllerLogic.Output.UnloadGame _) => UnloadCurrentScene())
             // game data
             .Handle((in AppControllerLogic.Output.LoadGameData _) => LoadGameData())
-            .Handle((in AppControllerLogic.Output.InitializeGameData _) => InitializeGameData());
+            .Handle((in AppControllerLogic.Output.InitializeGameData _) => InitializeGameData())
+            .Handle((in AppControllerLogic.Output.ExitGame _) => ExitGame());
 
         AppControllerLogic.Start();
     }
@@ -102,10 +102,13 @@ public partial class AppController : Node2D, IAppController {
 
         splashScreen.OnSplashScreenFinished += () => AppControllerLogic.Input(new AppControllerLogic.Input.ShowMainMenu());
 
-        _blackboard.Set<ISplashScreen>(splashScreen);
+        _currentNode = splashScreen;
     }
 
-    public void UnloadSplashScreen() => _blackboard.Get<ISplashScreen>()?.QueueFree();
+    public void UnloadCurrentScene() {
+        RemoveChild(_currentNode);
+        _currentNode?.QueueFree();
+    }
 
     // Main menu
     private void LoadMainMenu() {
@@ -119,11 +122,8 @@ public partial class AppController : Node2D, IAppController {
         mainMenu.OnOpenSettingsMenu += () => AppControllerLogic.Input(new AppControllerLogic.Input.ShowSettingsMenu());
         mainMenu.OnExitGame += () => AppControllerLogic.Input(new AppControllerLogic.Input.ExitGame());
 
-        _blackboard.Set<IMainMenu>(mainMenu);
+        _currentNode = mainMenu;
     }
-
-    private void UnloadMainMenu() => _blackboard.Get<IMainMenu>()?.QueueFree();
-
     // Settings menu
 
     private void LoadSettingsMenu() {
@@ -131,17 +131,29 @@ public partial class AppController : Node2D, IAppController {
         AddChild(settingsMenu);
         settingsMenu.Show();
         Instantiator.SceneTree.Paused = false;
-        _blackboard.Set<ISettingsMenu>(settingsMenu);
+
+        settingsMenu.OnReturnToMainMenu += () => AppControllerLogic.Input(new AppControllerLogic.Input.ShowMainMenu());
+
+        _currentNode = settingsMenu;
     }
 
-    private void UnloadSettingsMenu() => _blackboard.Get<ISettingsMenu>()?.QueueFree();
-
     // Ingame
+    private void LoadGame() {
+        var game = Instantiator.LoadAndInstantiate<Game>(GAME_SCENE_PATH);
+        AddChild(game);
+        game.Show();
+        Instantiator.SceneTree.Paused = false;
+
+        _currentNode = game;
+    }
+
     private void UnloadGame() => throw new NotImplementedException();
-    private void LoadGame() => throw new NotImplementedException();
 
     // Game load
-    private void InitializeGameData() => throw new NotImplementedException();
-    private void LoadGameData() => throw new NotImplementedException();
-}
+    private void InitializeGameData() =>
+        // Initialize new game here, default values etc, whatevs.
+        AppControllerLogic.Input(new AppControllerLogic.Input.EnterInGame());
 
+    private void LoadGameData() => throw new NotImplementedException();
+    private void ExitGame() => GetTree().Quit();
+}

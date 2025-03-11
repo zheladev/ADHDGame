@@ -37,5 +37,7 @@ public partial class AppControllerLogic : LogicBlock<AppControllerLogic.State>, 
         public readonly record struct LoadGameData;
         public readonly record struct GameDataLoaded;
         public readonly record struct InitializeGameData;
+
+        public readonly record struct ExitGame;
     }
 }

@@ -15,6 +15,13 @@ offset_right = 456.0
 offset_bottom = 69.6667
 text = "Settings Menu"
 
+[node name="Label2" type="Label" parent="."]
+offset_left = 192.0
+offset_top = 159.0
+offset_right = 499.0
+offset_bottom = 203.667
+text = "Nothing here yet lol"
+
 [node name="MainMenuButton" type="Button" parent="."]
 unique_name_in_owner = true
 layout_mode = 0
@@ -23,10 +30,3 @@ offset_top = 549.0
 offset_right = 477.0
 offset_bottom = 610.0
 text = "Back to menu"
-
-[node name="Label2" type="Label" parent="."]
-offset_left = 192.0
-offset_top = 159.0
-offset_right = 499.0
-offset_bottom = 203.667
-text = "Nothing here yet lol"

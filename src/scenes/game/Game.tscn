@@ -1,3 +1,13 @@
-[gd_scene format=3 uid="uid://dclauu2ih1aqx"]
+[gd_scene load_steps=3 format=3 uid="uid://dclauu2ih1aqx"]
+
+[ext_resource type="Script" uid="uid://bv0p333vpbseh" path="res://src/scenes/game/Game.cs" id="1_gp6tg"]
+[ext_resource type="Texture2D" uid="uid://bx603oua0dw45" path="res://assets/ship_test.png" id="2_4l5ac"]
 
 [node name="Game" type="Node2D"]
+script = ExtResource("1_gp6tg")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(326.653, 322.75)
+rotation = 2.27416
+scale = Vector2(4.62245, 4.62245)
+texture = ExtResource("2_4l5ac")
