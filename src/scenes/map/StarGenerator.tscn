@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dxti0llr8yxbi"]
+
+[ext_resource type="Script" uid="uid://dns0dm7w4wv71" path="res://src/scenes/map/StarGenerator.cs" id="1_5cgo1"]
+
+[node name="StarGenerator" type="Node2D"]
+script = ExtResource("1_5cgo1")
