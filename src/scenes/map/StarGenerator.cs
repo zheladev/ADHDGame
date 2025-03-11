@@ -15,8 +15,8 @@ public interface IStarGenerator : INode2D {
 public partial class StarGenerator : Node2D, IStarGenerator {
     public override void _Notification(int what) => this.Notify(what);
 
-    [Export] private int _starCount = 1000;
-    [Export] private float _galaxyRadius = 500f;
+    [Export] private int _starCount = 2000;
+    [Export] private float _galaxyRadius = 1000f;
     [Export] private float _centerConcentration = 0.5f;
 
     private readonly Random _random = new();
@@ -82,8 +82,12 @@ public partial class StarGenerator : Node2D, IStarGenerator {
             float x = radius * Mathf.Cos(angle);
             float y = radius * Mathf.Sin(angle);
 
-            Color color = GetStarColor();
-            CreateStar(new Vector2(x, y), color);
+            Star star = CreateRandomStar();
+            star.Position = new Vector2(x, y);
+            // Color color = GetStarColor();
+            // CreateStar(new Vector2(x, y), color);
+
+            AddChild(star);
         }
     }
 
@@ -112,36 +116,38 @@ public partial class StarGenerator : Node2D, IStarGenerator {
         AddChild(star);
     }
 
-    private Color GetStarColor() {
+    private Star CreateRandomStar() {
         float starType = (float)_random.NextDouble();
+
+        // return new StarO();
 
         if (starType < 0.01f) // O-type (1%)
         {
-            return new Color("#00BFFF");
+            return new StarO();
         }
         else if (starType < 0.05f) // B-type (4%)
         {
-            return new Color("#87CEEB");
+            return new StarB();
         }
         else if (starType < 0.15f) // A-type (10%)
         {
-            return new Color("#F0F8FF");
+            return new StarA();
         }
         else if (starType < 0.35f) // F-type (20%)
         {
-            return new Color("#FFD700");
+            return new StarF();
         }
         else if (starType < 0.65f) // G-type (30%)
         {
-            return new Color("#FFC300");
+            return new StarG();
         }
         else if (starType < 0.90f) // K-type (25%)
         {
-            return new Color("#FF8C00");
+            return new StarK();
         }
         else // M-type (10%)
         {
-            return new Color("#FF4500");
+            return new StarM();
         }
     }
 }
