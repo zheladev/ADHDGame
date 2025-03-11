@@ -1,12 +1,13 @@
 namespace ADHDGame.Scenes.AppController;
 
+using ADHDGame.Repositories;
 using ADHDGame.Utils;
 using Chickensoft.AutoInject;
 using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
 
-public interface IAppController : INode2D {
+public interface IAppController : INode2D, IProvide<IAppRepository> {
     // Define exposed functions and properties here.
 }
 
@@ -36,6 +37,7 @@ public partial class AppController : Node2D, IAppController {
     private Node LoadedScene { get; set; } = default!;
     // Define node state variables here
     // private bool _isRightMouseButtonHeld;
+    public IAppRepository AppRepository { get; set; } = default!;
     public IAppControllerLogic AppControllerLogic { get; set; } = default!;
     public AppControllerLogic.IBinding AppControllerBinding { get; set; } = default!;
     #endregion State
@@ -48,6 +50,7 @@ public partial class AppController : Node2D, IAppController {
     #region Provisions
     // TODO: Provide all repositories
     // IGameRepository IProvide<IGameRepository>.Value() => GameRepository;
+    IAppRepository IProvide<IAppRepository>.Value() => AppRepository;
     #endregion Provisions
 
     #region Dependencies
@@ -61,7 +64,7 @@ public partial class AppController : Node2D, IAppController {
         AppControllerLogic = new AppControllerLogic();
         // Instantiate Repositories here
 
-
+        AppRepository = new AppRepository();
 
         this.Provide();
     }
@@ -86,9 +89,7 @@ public partial class AppController : Node2D, IAppController {
         AddChild(splashScreen);
         splashScreen.Show();
         Instantiator.SceneTree.Paused = false;
-        GD.Print("Adding shit");
         splashScreen.OnSplashScreenFinished += OnSplashScreenTimerTimeout;
-        GD.Print("Added shit");
         LoadedScene = splashScreen;
     }
 
@@ -102,15 +103,15 @@ public partial class AppController : Node2D, IAppController {
         LoadedScene = mainMenu;
     }
 
-    private void ShowInGame() {
+    private static void ShowInGame() {
         // Show in game
     }
 
-    private void LoadGame() {
+    private static void LoadGame() {
         // Load game
     }
 
-    private void NewGame() {
+    private static void NewGame() {
         // Start new game
     }
 
