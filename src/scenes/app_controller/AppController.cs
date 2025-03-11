@@ -20,6 +20,7 @@ public partial class AppController : Node2D, IAppController {
     public const string SPLASH_SCREEN_SCENE_PATH = "res://src/scenes/init_menu/splash_screen/SplashScreen.tscn";
     public const string SETTINGS_MENU_SCENE_PATH = "res://src/scenes/init_menu/settings_menu/SettingsMenu.tscn";
     public const string MAIN_MENU_SCENE_PATH = "res://src/scenes/init_menu/main_menu/MainMenu.tscn";
+    public const string GAME_SCENE_PATH = "res://src/scenes/game/Game.tscn";
 
     #region Nodes
     // AutoInjected child nodes go here.
@@ -98,7 +99,9 @@ public partial class AppController : Node2D, IAppController {
         AddChild(splashScreen);
         splashScreen.Show();
         Instantiator.SceneTree.Paused = false;
-        splashScreen.OnSplashScreenFinished += OnSplashScreenTimerTimeout;
+
+        splashScreen.OnSplashScreenFinished += () => AppControllerLogic.Input(new AppControllerLogic.Input.ShowMainMenu());
+
         _blackboard.Set<ISplashScreen>(splashScreen);
     }
 
@@ -110,6 +113,12 @@ public partial class AppController : Node2D, IAppController {
         AddChild(mainMenu);
         mainMenu.Show();
         Instantiator.SceneTree.Paused = false;
+
+        mainMenu.OnStartNewGame += () => AppControllerLogic.Input(new AppControllerLogic.Input.InitializeNewGame());
+        mainMenu.OnStartLoadGame += () => AppControllerLogic.Input(new AppControllerLogic.Input.LoadGameData());
+        mainMenu.OnOpenSettingsMenu += () => AppControllerLogic.Input(new AppControllerLogic.Input.ShowSettingsMenu());
+        mainMenu.OnExitGame += () => AppControllerLogic.Input(new AppControllerLogic.Input.ExitGame());
+
         _blackboard.Set<IMainMenu>(mainMenu);
     }
 
@@ -134,8 +143,5 @@ public partial class AppController : Node2D, IAppController {
     // Game load
     private void InitializeGameData() => throw new NotImplementedException();
     private void LoadGameData() => throw new NotImplementedException();
-
-
-    private void OnSplashScreenTimerTimeout() => AppControllerLogic.Input(new AppControllerLogic.Input.ShowMainMenu());
 }
 

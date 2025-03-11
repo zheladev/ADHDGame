@@ -5,12 +5,12 @@ using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
 
-public interface ISettingsMenu : IControl {
+public interface IGame : INode2D {
     // Define exposed functions and properties here.
 }
 
 [Meta(typeof(IAutoNode))]
-public partial class SettingsMenu : Control, ISettingsMenu {
+public partial class Game : Node2D, IGame {
     public override void _Notification(int what) => this.Notify(what);
 
     #region Nodes

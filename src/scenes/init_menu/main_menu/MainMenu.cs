@@ -6,7 +6,10 @@ using Chickensoft.Introspection;
 using Godot;
 
 public interface IMainMenu : IControl {
-    // Define exposed functions and properties here.
+    public event MainMenu.OnStartNewGameEventHandler OnStartNewGame;
+    public event MainMenu.OnStartLoadGameEventHandler OnStartLoadGame;
+    public event MainMenu.OnOpenSettingsMenuEventHandler OnOpenSettingsMenu;
+    public event MainMenu.OnExitGameEventHandler OnExitGame;
 }
 
 [Meta(typeof(IAutoNode))]
@@ -17,44 +20,29 @@ public partial class MainMenu : Control, IMainMenu {
     // AutoInjected child nodes go here.
     // Example:
     // [Node] public IArea2D ExampleArea { get; set; } = default!;
+    [Node] public IButton NewGameButton { get; set; } = default!;
+    [Node] public IButton LoadGameButton { get; set; } = default!;
+    [Node] public IButton SettingsButton { get; set; } = default!;
+    [Node] public IButton ExitGameButton { get; set; } = default!;
     #endregion Nodes
 
     #region Signals
-    // Signals go here
-    // Example:
-    // [Signal] public delegate void MainMenuEventHandler();
+    [Signal] public delegate void OnStartNewGameEventHandler();
+    [Signal] public delegate void OnStartLoadGameEventHandler();
+    [Signal] public delegate void OnOpenSettingsMenuEventHandler();
+    [Signal] public delegate void OnExitGameEventHandler();
     #endregion Signals
-
-    #region State
-    // Define node state variables here
-    // private bool _isRightMouseButtonHeld;
-    #endregion State
-
-    #region External
-    // Non-godot vars go here
-    // Example:
-    // public IInstantiator Instantiator { get; set; } = default!;
-    #endregion External
-
-
-    #region Provisions
-    // Provisions go here. These are exposed to children and can be retrieved
-    // using dependencies. Check Dependencies region for an example.
-    // Example:
-    // IGameRepository IProvide<IGameRepository>.Value() => GameRepository;
-    #endregion Provisions
-
-    #region Dependencies
-    // Repository injections go here
-    // Example:
-    // [Dependency] public IGameRepository GameRepository => this.DependOn<GameRepository>();
-    #endregion Dependencies
 
     public void Setup() {
         // instantiation of objects and context setup
     }
 
-    public void OnReady() { }
+    public void OnReady() {
+        NewGameButton.Pressed += () => EmitSignal(nameof(OnStartNewGame));
+        LoadGameButton.Pressed += () => EmitSignal(nameof(OnStartLoadGame));
+        SettingsButton.Pressed += () => EmitSignal(nameof(OnOpenSettingsMenu));
+        ExitGameButton.Pressed += () => EmitSignal(nameof(OnExitGame));
+    }
 
     public void OnExitTree() { }
 }

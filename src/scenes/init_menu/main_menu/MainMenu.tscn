@@ -19,17 +19,33 @@ horizontal_alignment = 1
 [node name="NewGameButton" type="Button" parent="."]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 266.0
-offset_top = 143.0
-offset_right = 451.0
-offset_bottom = 204.0
+offset_left = 148.0
+offset_top = 384.0
+offset_right = 333.0
+offset_bottom = 445.0
 text = "New Game"
 
 [node name="SettingsButton" type="Button" parent="."]
 unique_name_in_owner = true
 layout_mode = 0
-offset_left = 266.0
-offset_top = 238.0
-offset_right = 451.0
-offset_bottom = 299.0
+offset_left = 269.0
+offset_top = 476.0
+offset_right = 454.0
+offset_bottom = 537.0
 text = "Settings"
+
+[node name="LoadGameButton" type="Button" parent="."]
+unique_name_in_owner = true
+offset_left = 376.0
+offset_top = 384.0
+offset_right = 567.0
+offset_bottom = 445.0
+text = "Load Game"
+
+[node name="ExitGameButton" type="Button" parent="."]
+unique_name_in_owner = true
+offset_left = 515.0
+offset_top = 644.0
+offset_right = 695.0
+offset_bottom = 705.0
+text = "Exit game"

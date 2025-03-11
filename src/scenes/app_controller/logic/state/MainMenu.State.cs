@@ -8,14 +8,14 @@ public partial class AppControllerLogic {
         [Meta]
         public partial record MainMenu : State, IGet<Input.LoadGameData>, IGet<Input.InitializeNewGame>, IGet<Input.ShowSettingsMenu> {
             public MainMenu() {
-                this.OnEnter(OnEnterHandler);
+                this.OnEnter(() => Output(new Output.LoadMainMenu()));
+                this.OnExit(() => Output(new Output.UnloadMainMenu()));
             }
 
             public Transition On(in Input.LoadGameData input) => To<LoadGameData>();
-            public Transition On(in Input.InitializeNewGame input) => To<StartNewGame>();
+            public Transition On(in Input.InitializeNewGame input) => To<InitializeGameData>();
             public Transition On(in Input.ShowSettingsMenu input) => To<SettingsMenu>();
 
-            private void OnEnterHandler() => Output(new Output.LoadMainMenu());
         }
     }
 }
