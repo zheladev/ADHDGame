@@ -12,6 +12,7 @@ public partial class AppControllerLogic {
             }
 
             public Transition On(in Input.EnterInGame input) => To<InGame>();
+
             private void OnEnterHandler() =>
                 // TODO: initialize user data
                 Output(new Output.InitializeGameData());
