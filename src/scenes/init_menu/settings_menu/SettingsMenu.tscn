@@ -1,8 +1,11 @@
-[gd_scene format=3 uid="uid://1vf668ecqr7d"]
+[gd_scene load_steps=2 format=3 uid="uid://1vf668ecqr7d"]
+
+[ext_resource type="Script" uid="uid://84fmyn6hhrp8" path="res://src/scenes/init_menu/settings_menu/SettingsMenu.cs" id="1_uhoi0"]
 
 [node name="SettingsMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 0
+script = ExtResource("1_uhoi0")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0

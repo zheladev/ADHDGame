@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dm1cp8berlnc4"]
 
-[ext_resource type="Script" uid="uid://bc4x0lh7v7vhy" path="res://src/scenes/splash_screen/SplashScreen.cs" id="1_0h33m"]
+[ext_resource type="Script" uid="uid://bc4x0lh7v7vhy" path="res://src/scenes/init_menu/splash_screen/SplashScreen.cs" id="1_0h33m"]
 [ext_resource type="Texture2D" uid="uid://bx603oua0dw45" path="res://assets/ship_test.png" id="1_qjrpf"]
 
 [node name="SplashScreen" type="Node2D"]

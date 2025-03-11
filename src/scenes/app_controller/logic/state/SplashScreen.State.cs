@@ -8,7 +8,7 @@ public partial class AppControllerLogic {
         [Meta]
         public partial record SplashScreen : State, IGet<Input.ShowMainMenu> {
             public SplashScreen() {
-                this.OnEnter(() => Output(new Output.ShowSplashScreen()));
+                this.OnEnter(() => Output(new Output.LoadSplashScreen()));
             }
 
             public Transition On(in Input.ShowMainMenu input) => To<MainMenu>();

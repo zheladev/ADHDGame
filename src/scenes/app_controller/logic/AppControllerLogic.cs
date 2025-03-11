@@ -14,18 +14,28 @@ public partial class AppControllerLogic : LogicBlock<AppControllerLogic.State>, 
     public static class Input {
         public readonly record struct ShowSettingsMenu;
         public readonly record struct ShowMainMenu;
-        public readonly record struct StartNewGame;
+        public readonly record struct InitializeNewGame;
         public readonly record struct LoadGameData;
         public readonly record struct EnterInGame;
         public readonly record struct ExitGame;
     }
 
     public static class Output {
-        public readonly record struct ShowSplashScreen;
-        public readonly record struct ShowMainMenu;
-        public readonly record struct ShowInGame;
+        // splash screen
+        public readonly record struct LoadSplashScreen;
+        public readonly record struct UnloadSplashScreen;
+        // main menu
+        public readonly record struct LoadMainMenu;
+        public readonly record struct UnloadMainMenu;
+        // settings menu
+        public readonly record struct LoadSettingsMenu;
+        public readonly record struct UnloadSettingsMenu;
+        // in game
+        public readonly record struct LoadGame;
+        public readonly record struct UnloadGame;
+        // game data
         public readonly record struct LoadGameData;
         public readonly record struct GameDataLoaded;
-        public readonly record struct NewGame;
+        public readonly record struct InitializeGameData;
     }
 }

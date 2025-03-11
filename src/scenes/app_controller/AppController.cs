@@ -1,8 +1,10 @@
 namespace ADHDGame.Scenes.AppController;
 
+using System;
 using ADHDGame.Repositories;
 using ADHDGame.Utils;
 using Chickensoft.AutoInject;
+using Chickensoft.Collections;
 using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
@@ -15,9 +17,9 @@ public interface IAppController : INode2D, IProvide<IAppRepository> {
 public partial class AppController : Node2D, IAppController {
     public override void _Notification(int what) => this.Notify(what);
 
-    public const string SPLASH_SCREEN_SCENE_PATH = "res://src/scenes/splash_screen/SplashScreen.tscn";
-    public const string SETTINGS_MENU_SCENE_PATH = "res://src/scenes/settings_menu/SettingsMenu.tscn";
-    public const string MAIN_MENU_SCENE_PATH = "res://src/scenes/main_menu/MainMenu.tscn";
+    public const string SPLASH_SCREEN_SCENE_PATH = "res://src/scenes/init_menu/splash_screen/SplashScreen.tscn";
+    public const string SETTINGS_MENU_SCENE_PATH = "res://src/scenes/init_menu/settings_menu/SettingsMenu.tscn";
+    public const string MAIN_MENU_SCENE_PATH = "res://src/scenes/init_menu/main_menu/MainMenu.tscn";
 
     #region Nodes
     // AutoInjected child nodes go here.
@@ -34,9 +36,7 @@ public partial class AppController : Node2D, IAppController {
 
 
     #region State
-    private Node LoadedScene { get; set; } = default!;
-    // Define node state variables here
-    // private bool _isRightMouseButtonHeld;
+    private readonly Blackboard _blackboard = new();
     public IAppRepository AppRepository { get; set; } = default!;
     public IAppControllerLogic AppControllerLogic { get; set; } = default!;
     public AppControllerLogic.IBinding AppControllerBinding { get; set; } = default!;
@@ -73,47 +73,68 @@ public partial class AppController : Node2D, IAppController {
         AppControllerBinding = AppControllerLogic.Bind();
 
         AppControllerBinding
-            .Handle((in AppControllerLogic.Output.ShowSplashScreen _) => ShowSplashScreen())
-            .Handle((in AppControllerLogic.Output.ShowMainMenu _) => ShowMainMenu())
-            .Handle((in AppControllerLogic.Output.ShowInGame _) => ShowInGame())
-            .Handle((in AppControllerLogic.Output.LoadGameData _) => LoadGame())
-            .Handle((in AppControllerLogic.Output.NewGame _) => NewGame());
+            // splash screen
+            .Handle((in AppControllerLogic.Output.LoadSplashScreen _) => LoadSplashScreen())
+            .Handle((in AppControllerLogic.Output.UnloadSplashScreen _) => UnloadSplashScreen())
+            // main menu
+            .Handle((in AppControllerLogic.Output.LoadMainMenu _) => LoadMainMenu())
+            .Handle((in AppControllerLogic.Output.UnloadMainMenu _) => UnloadMainMenu())
+            // settings
+            .Handle((in AppControllerLogic.Output.LoadSettingsMenu _) => LoadSettingsMenu())
+            .Handle((in AppControllerLogic.Output.UnloadSettingsMenu _) => UnloadSettingsMenu())
+            // in game
+            .Handle((in AppControllerLogic.Output.LoadGame _) => LoadGame())
+            .Handle((in AppControllerLogic.Output.UnloadGame _) => UnloadGame())
+            // game data
+            .Handle((in AppControllerLogic.Output.LoadGameData _) => LoadGameData())
+            .Handle((in AppControllerLogic.Output.InitializeGameData _) => InitializeGameData());
 
         AppControllerLogic.Start();
     }
 
-
-    private void ShowSplashScreen() {
-        LoadedScene?.QueueFree();
+    // Splash screen
+    public void LoadSplashScreen() {
         var splashScreen = Instantiator.LoadAndInstantiate<SplashScreen>(SPLASH_SCREEN_SCENE_PATH);
         AddChild(splashScreen);
         splashScreen.Show();
         Instantiator.SceneTree.Paused = false;
         splashScreen.OnSplashScreenFinished += OnSplashScreenTimerTimeout;
-        LoadedScene = splashScreen;
+        _blackboard.Set<ISplashScreen>(splashScreen);
     }
 
-    private void ShowMainMenu() {
-        LoadedScene?.QueueFree();
-        GD.Print("Main menu entered");
+    public void UnloadSplashScreen() => _blackboard.Get<ISplashScreen>()?.QueueFree();
+
+    // Main menu
+    private void LoadMainMenu() {
         var mainMenu = Instantiator.LoadAndInstantiate<MainMenu>(MAIN_MENU_SCENE_PATH);
         AddChild(mainMenu);
         mainMenu.Show();
         Instantiator.SceneTree.Paused = false;
-        LoadedScene = mainMenu;
+        _blackboard.Set<IMainMenu>(mainMenu);
     }
 
-    private static void ShowInGame() {
-        // Show in game
+    private void UnloadMainMenu() => _blackboard.Get<IMainMenu>()?.QueueFree();
+
+    // Settings menu
+
+    private void LoadSettingsMenu() {
+        var settingsMenu = Instantiator.LoadAndInstantiate<SettingsMenu>(SETTINGS_MENU_SCENE_PATH);
+        AddChild(settingsMenu);
+        settingsMenu.Show();
+        Instantiator.SceneTree.Paused = false;
+        _blackboard.Set<ISettingsMenu>(settingsMenu);
     }
 
-    private static void LoadGame() {
-        // Load game
-    }
+    private void UnloadSettingsMenu() => _blackboard.Get<ISettingsMenu>()?.QueueFree();
 
-    private static void NewGame() {
-        // Start new game
-    }
+    // Ingame
+    private void UnloadGame() => throw new NotImplementedException();
+    private void LoadGame() => throw new NotImplementedException();
+
+    // Game load
+    private void InitializeGameData() => throw new NotImplementedException();
+    private void LoadGameData() => throw new NotImplementedException();
+
 
     private void OnSplashScreenTimerTimeout() => AppControllerLogic.Input(new AppControllerLogic.Input.ShowMainMenu());
 }
