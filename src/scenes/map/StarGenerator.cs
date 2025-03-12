@@ -1,6 +1,7 @@
 namespace ADHDGame;
 
 using System;
+using System.Collections.Generic;
 
 using Chickensoft.AutoInject;
 using Chickensoft.GodotNodeInterfaces;
@@ -18,8 +19,11 @@ public partial class StarGenerator : Node2D, IStarGenerator {
     [Export] private int _starCount = 2000;
     [Export] private float _galaxyRadius = 1000f;
     [Export] private float _centerConcentration = 0.5f;
+    [Export] private ulong _seed = 123456789;
+    [Export] private float minDistance = 20f; // TODO
 
-    private readonly Random _random = new();
+    private readonly RandomNumberGenerator _rng = new();
+    private List<Vector2> starPositions = new List<Vector2>();
 
     #region Nodes
     // AutoInjected child nodes go here.
@@ -62,6 +66,7 @@ public partial class StarGenerator : Node2D, IStarGenerator {
 
     public void Setup()
     {
+        _rng.Seed = (ulong)_seed;
         // instantiation of objects and context setup
     }
 
@@ -75,17 +80,17 @@ public partial class StarGenerator : Node2D, IStarGenerator {
     private void GenerateStars() {
         for (int i = 0; i < _starCount; i++) {
             // Generate polar coordinates
-            float angle = (float)_random.NextDouble() * 2 * Mathf.Pi;
+            float angle = _rng.Randf() * 2 * Mathf.Pi;
             float radius = GenerateRadius();
+            // Vector2 position = GenerateStarPosition();
 
             // Convert to Cartesian coordinates
             float x = radius * Mathf.Cos(angle);
             float y = radius * Mathf.Sin(angle);
 
-            Star star = CreateRandomStar();
+            Star star = CreateRandomStar(_seed);
+            // starPositions.Add(position);
             star.Position = new Vector2(x, y);
-            // Color color = GetStarColor();
-            // CreateStar(new Vector2(x, y), color);
 
             AddChild(star);
         }
@@ -93,8 +98,8 @@ public partial class StarGenerator : Node2D, IStarGenerator {
 
     private float GenerateRadius() {
         // Normal distribution
-        float u1 = 1.0f - (float)_random.NextDouble();
-        float u2 = 1.0f - (float)_random.NextDouble();
+        float u1 = 1.0f - _rng.Randf();
+        float u2 = 1.0f - _rng.Randf();
         float randStdNormal = Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Sin(2.0f * Mathf.Pi * u2);
         float radius = Mathf.Abs(randStdNormal) * _galaxyRadius * _centerConcentration;
 
@@ -102,24 +107,33 @@ public partial class StarGenerator : Node2D, IStarGenerator {
         return Mathf.Min(radius, _galaxyRadius);
     }
 
-    private void CreateStar(Vector2 position, Color color) {
-        var star = new Sprite2D {
-            Position = position
-        };
+    private Vector2 GenerateStarPosition()
+    {
+        Vector2 position;
+        bool isValidPosition;
 
-        var image = Image.CreateEmpty(16, 16, false, Image.Format.Rgba8);
-        image.Fill(color);
+        do
+        {
+            float angle = (float)GD.RandRange(0, 2 * Mathf.Pi);
+            float radius = (float)GD.RandRange(0, _galaxyRadius);
+            position = new Vector2(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle));
 
-        var texture = ImageTexture.CreateFromImage(image);
-        star.Texture = texture;
+            isValidPosition = true;
+            foreach (Vector2 existingPosition in starPositions)
+            {
+                if (position.DistanceTo(existingPosition) < minDistance)
+                {
+                    isValidPosition = false;
+                    break;
+                }
+            }
+        } while (!isValidPosition);
 
-        AddChild(star);
+        return position;
     }
 
-    private Star CreateRandomStar() {
-        float starType = (float)_random.NextDouble();
-
-        // return new StarO();
+    private Star CreateRandomStar(ulong useed) {
+        float starType = _rng.Randf();
 
         if (starType < 0.01f) // O-type (1%)
         {

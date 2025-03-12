@@ -20,6 +20,9 @@ public abstract partial class Star : Node2D, IStar
 
     [Export] public Color StarColor { get; set; }
     [Export] public float Radius { get; set; }
+    [Export] public float PlanetSystemRadius = 50f;
+
+    private readonly RandomNumberGenerator _rng = new();
 
     #region Nodes
     // AutoInjected child nodes go here.
@@ -60,8 +63,9 @@ public abstract partial class Star : Node2D, IStar
     // [Dependency] public IGameRepository GameRepository => this.DependOn<GameRepository>();
     #endregion Dependencies
 
-    public void Setup()
+    public void Setup(ulong seed)
     {
+        _rng.Seed = (ulong)seed;
         // instantiation of objects and context setup
     }
 
@@ -72,11 +76,11 @@ public abstract partial class Star : Node2D, IStar
     public override void _Draw()
     {
         DrawCircle(Vector2.Zero, Radius, StarColor);
+        DrawCircle(Vector2.Zero, PlanetSystemRadius, new Color(1, 1, 1, 0.1f));
     }
 
-    // Método para generar el radio aleatoriamente dentro de un rango
-    protected float GenerateRadius(float minRadius, float maxRadius)
+    public float GenerateRadius(float minRadius, float maxRadius)
     {
-        return (float)GD.RandRange(minRadius, maxRadius);
+        return _rng.RandfRange(minRadius, maxRadius);
     }
 }
