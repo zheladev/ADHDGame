@@ -1,5 +1,8 @@
 namespace ADHDGame;
 
+using System;
+using System.Collections.Generic;
+
 using Chickensoft.AutoInject;
 using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
@@ -10,7 +13,10 @@ public interface IStar : INode2D
     public Color StarColor { get; set; }
     public float Radius { get; set; }
 
-    // public void _Draw();
+    public float PlanetSystemRadius { get; set; }
+    public List<Planet> Planets { get; set; }
+
+    public abstract void GeneratePlanetarySystem();
 }
 
 [Meta(typeof(IAutoNode))]
@@ -20,7 +26,9 @@ public abstract partial class Star : Node2D, IStar
 
     [Export] public Color StarColor { get; set; }
     [Export] public float Radius { get; set; }
-    [Export] public float PlanetSystemRadius = 50f;
+
+    [Export] public float PlanetSystemRadius { get; set; }
+    public List<Planet> Planets { get; set; } = new List<Planet>();
 
     protected const float starScaling = 695f;   // base unit is 10^3 km
     private readonly RandomNumberGenerator _rng = new();
@@ -84,4 +92,35 @@ public abstract partial class Star : Node2D, IStar
     {
         return _rng.RandfRange(minRadius, maxRadius);
     }
+
+    public void GeneratePlanetarySystem()
+    {
+        int planetCount = _rng.RandiRange(1, 8);
+        for (int i = 0; i < planetCount; i++)
+        {
+            Vector2 position = GeneratePlanetPosition();
+            float orbitalDistance = position.Length();
+            float planetRadius = _rng.RandfRange(10, 100);
+
+            Planet planet = new Planet{
+                Radius = planetRadius,
+                OrbitalDistance = orbitalDistance,
+                Position = position,
+                StarPosition = new Vector2(0, 0),
+            };
+
+            Planets.Add(planet);
+            AddChild(planet);
+        }
+    }
+
+    private Vector2 GeneratePlanetPosition()
+    {
+        float angle = _rng.RandfRange(0, 2 * Mathf.Pi);
+        float radius = _rng.RandfRange(Radius, PlanetSystemRadius); // Distancia en UA
+        Vector2 position = new Vector2(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle));
+
+        return position;
+    }
+
 }

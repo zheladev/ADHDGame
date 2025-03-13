@@ -15,7 +15,7 @@ public partial class MapCamera : Camera2D, IMapCamera
 {
     public override void _Notification(int what) => this.Notify(what);
 
-    [Export] private float minZoom = 0.001953125f;
+    [Export] private float minZoom = 0.00048828125f;
     [Export] private float maxZoom = 512.0f; 
     [Export] private float dragSlowdown = 0.7f;
     [Export] private float smoothness = 12.0f;
@@ -100,7 +100,6 @@ public partial class MapCamera : Camera2D, IMapCamera
             Mathf.Clamp(Zoom.X, minZoom, maxZoom),
             Mathf.Clamp(Zoom.Y, minZoom, maxZoom)
         );
-        GD.Print(Zoom);
 
     }
 

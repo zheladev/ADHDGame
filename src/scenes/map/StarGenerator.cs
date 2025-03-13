@@ -92,6 +92,7 @@ public partial class StarGenerator : Node2D, IStarGenerator {
             // starPositions.Add(position);
             star.Position = new Vector2(x, y);
 
+            star.GeneratePlanetarySystem();
             AddChild(star);
         }
     }

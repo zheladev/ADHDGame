@@ -8,5 +8,6 @@ public partial class StarG : Star
     {
         StarColor = new Color("#FFC300");
         Radius = GenerateRadius(0.96f, 1.15f) * starScaling;
+        PlanetSystemRadius = 50f * starScaling;
     }
 }
