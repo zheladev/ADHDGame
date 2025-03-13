@@ -24,6 +24,8 @@ public abstract partial class Star : Node2D, IStar
 {
     public override void _Notification(int what) => this.Notify(what);
 
+    private RandomNumberGenerator rng { get; set; } = new();
+
     [Export] public Color StarColor { get; set; }
     [Export] public float Radius { get; set; }
 
@@ -31,7 +33,6 @@ public abstract partial class Star : Node2D, IStar
     public List<Planet> Planets { get; set; } = new List<Planet>();
 
     protected const float starScaling = 695f;   // base unit is 10^3 km
-    private readonly RandomNumberGenerator _rng = new();
 
     #region Nodes
     // AutoInjected child nodes go here.
@@ -72,9 +73,8 @@ public abstract partial class Star : Node2D, IStar
     // [Dependency] public IGameRepository GameRepository => this.DependOn<GameRepository>();
     #endregion Dependencies
 
-    public void Setup(ulong seed)
+    public void Setup()
     {
-        _rng.Seed = (ulong)seed;
         // instantiation of objects and context setup
     }
 
@@ -88,19 +88,23 @@ public abstract partial class Star : Node2D, IStar
         DrawCircle(Vector2.Zero, PlanetSystemRadius, new Color(1, 1, 1, 0.1f));
     }
 
+    public void SetSeed(ulong seed) {
+        rng.Seed = seed;
+    }
+
     public float GenerateRadius(float minRadius, float maxRadius)
     {
-        return _rng.RandfRange(minRadius, maxRadius);
+        return rng.RandfRange(minRadius, maxRadius);
     }
 
     public void GeneratePlanetarySystem()
     {
-        int planetCount = _rng.RandiRange(1, 8);
+        int planetCount = rng.RandiRange(1, 8);
         for (int i = 0; i < planetCount; i++)
         {
             Vector2 position = GeneratePlanetPosition();
             float orbitalDistance = position.Length();
-            float planetRadius = _rng.RandfRange(10, 100);
+            float planetRadius = rng.RandfRange(10, 100);
 
             Planet planet = new Planet{
                 Radius = planetRadius,
@@ -116,8 +120,8 @@ public abstract partial class Star : Node2D, IStar
 
     private Vector2 GeneratePlanetPosition()
     {
-        float angle = _rng.RandfRange(0, 2 * Mathf.Pi);
-        float radius = _rng.RandfRange(Radius, PlanetSystemRadius); // Distancia en UA
+        float angle = rng.RandfRange(0, 2 * Mathf.Pi);
+        float radius = rng.RandfRange(Radius, PlanetSystemRadius); // Distancia en UA
         Vector2 position = new Vector2(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle));
 
         return position;

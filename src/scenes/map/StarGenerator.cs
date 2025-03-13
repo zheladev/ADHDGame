@@ -88,9 +88,12 @@ public partial class StarGenerator : Node2D, IStarGenerator {
             float x = radius * Mathf.Cos(angle);
             float y = radius * Mathf.Sin(angle);
 
-            Star star = CreateRandomStar(_seed);
+            Star star = CreateRandomStar();
+            ulong starSeed = _seed + (ulong)i;
+            star.SetSeed(starSeed);
             // starPositions.Add(position);
             star.Position = new Vector2(x, y);
+            // star.rng = _rng;
 
             star.GeneratePlanetarySystem();
             AddChild(star);
@@ -115,8 +118,8 @@ public partial class StarGenerator : Node2D, IStarGenerator {
 
         do
         {
-            float angle = (float)GD.RandRange(0, 2 * Mathf.Pi);
-            float radius = (float)GD.RandRange(0, _galaxyRadius);
+            float angle = _rng.RandfRange(0, 2 * Mathf.Pi);
+            float radius = _rng.RandfRange(0, _galaxyRadius);
             position = new Vector2(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle));
 
             isValidPosition = true;
@@ -133,7 +136,7 @@ public partial class StarGenerator : Node2D, IStarGenerator {
         return position;
     }
 
-    private Star CreateRandomStar(ulong useed) {
+    private Star CreateRandomStar() {
         float starType = _rng.Randf();
 
         if (starType < 0.0001f) // O-type (0.01%)
