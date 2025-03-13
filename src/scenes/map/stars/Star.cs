@@ -22,6 +22,7 @@ public abstract partial class Star : Node2D, IStar
     [Export] public float Radius { get; set; }
     [Export] public float PlanetSystemRadius = 50f;
 
+    protected const float starScaling = 695f;   // base unit is 10^3 km
     private readonly RandomNumberGenerator _rng = new();
 
     #region Nodes

@@ -17,7 +17,7 @@ public partial class StarGenerator : Node2D, IStarGenerator {
     public override void _Notification(int what) => this.Notify(what);
 
     [Export] private int _starCount = 2000;
-    [Export] private float _galaxyRadius = 1000f;
+    [Export] private float _galaxyRadius = 2000000f;
     [Export] private float _centerConcentration = 0.5f;
     [Export] private ulong _seed = 123456789;
     [Export] private float minDistance = 20f; // TODO
@@ -135,31 +135,31 @@ public partial class StarGenerator : Node2D, IStarGenerator {
     private Star CreateRandomStar(ulong useed) {
         float starType = _rng.Randf();
 
-        if (starType < 0.01f) // O-type (1%)
+        if (starType < 0.0001f) // O-type (0.01%)
         {
             return new StarO();
         }
-        else if (starType < 0.05f) // B-type (4%)
+        else if (starType < 0.001f) // B-type (0.09%)
         {
             return new StarB();
         }
-        else if (starType < 0.15f) // A-type (10%)
+        else if (starType < 0.01f) // A-type (1%)
         {
             return new StarA();
         }
-        else if (starType < 0.35f) // F-type (20%)
+        else if (starType < 0.04f) // F-type (3%)
         {
             return new StarF();
         }
-        else if (starType < 0.65f) // G-type (30%)
+        else if (starType < 0.12f) // G-type (8%)
         {
             return new StarG();
         }
-        else if (starType < 0.90f) // K-type (25%)
+        else if (starType < 0.24f) // K-type (12%)
         {
             return new StarK();
         }
-        else // M-type (10%)
+        else // M-type (76%)
         {
             return new StarM();
         }
