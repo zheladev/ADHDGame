@@ -6,7 +6,7 @@ using Chickensoft.Introspection;
 using Godot;
 
 public interface IPlanet : INode2D {
-    // Define exposed functions and properties here.
+    public void SetRotationSpeed(float speed); // TODO: fix this shit
 }
 
 [Meta(typeof(IAutoNode))]
@@ -16,30 +16,29 @@ public partial class Planet : Node2D, IPlanet {
     #region Nodes
     [Node] public ISprite2D SurfaceSprite { get; set; } = default!;
     [Node] public ISprite2D CloudsSprite { get; set; } = default!;
+    [Node] public ITimer Timer { get; set; } = default!;
     #endregion Nodes
 
     #region State
-    private float _rotationSpeed = 0.1f;
     [Export]
-    public float RotationSpeed {
-        get => _rotationSpeed;
-        set {
-            _rotationSpeed = value;
-            SetSMParams("RotationSpeed", value);
-        }
-    }
+    public float RotationSpeed { get; set; } = 99f;
     private ShaderMaterial _surfaceMaterial;
     private ShaderMaterial _cloudsMaterial;
     #endregion State
 
     public void OnReady() {
-        var surface_sm = (ShaderMaterial)SurfaceSprite.GetMaterial();
-        var clouds_sm = (ShaderMaterial)CloudsSprite.GetMaterial();
-
+        _surfaceMaterial = (ShaderMaterial)SurfaceSprite.GetMaterial();
+        _cloudsMaterial = (ShaderMaterial)CloudsSprite.GetMaterial();
         SetSMParams("rotation_speed", RotationSpeed);
     }
 
-    private void SetSMParams(string param_name, Variant value) {
+    public void SetRotationSpeed(float speed) {
+        RotationSpeed = speed;
+        SetSMParams("rotation_speed", speed);
+    }
+
+    private void SetSMParams(string param_name, float value) {
+        GD.Print("set to" + value);
         _surfaceMaterial.SetShaderParameter(param_name, value);
         _cloudsMaterial.SetShaderParameter(param_name, value);
     }

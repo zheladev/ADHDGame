@@ -37,3 +37,9 @@ texture_repeat = 2
 material = SubResource("ShaderMaterial_5jap0")
 scale = Vector2(0.26001, 0.520019)
 texture = ExtResource("3_induo")
+
+[node name="Timer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 1.5
+one_shot = true
+autostart = true

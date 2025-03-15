@@ -16,6 +16,8 @@ public partial class SplashScreen : Node2D, ISplashScreen {
 
     #region Nodes
     [Node] public ITimer SplashScreenTimer { get; set; } = default!;
+    [Node] public IPlanet PlanetLeft { get; set; } = default!;
+    [Node] public IPlanet PlanetRight { get; set; } = default!;
     #endregion Nodes
 
     #region Signals
@@ -24,7 +26,7 @@ public partial class SplashScreen : Node2D, ISplashScreen {
 
     public void Setup() => SplashScreenTimer.Timeout += () => EmitSignal(SignalName.OnSplashScreenFinished);
 
-    public void OnReady() { }
+    public void OnReady() => CallDeferred(MethodName.UpdatePlanetRotationalSpeed);
 
-    public void OnExitTree() { }
+    private void UpdatePlanetRotationalSpeed() => PlanetLeft.SetRotationSpeed(0.01f);
 }
