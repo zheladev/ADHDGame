@@ -13,10 +13,12 @@ public interface IPlanet : INode2D {
 public partial class Planet : Node2D, IPlanet {
     public override void _Notification(int what) => this.Notify(what);
 
+    private const string SURFACE_SHADER_PATH = "res://src/features/planet/Planet.gdshader";
+    private const string CLOUDS_SHADER_PATH = "res://src/features/planet/Clouds.gdshader";
+
     #region Nodes
     [Node] public ISprite2D SurfaceSprite { get; set; } = default!;
     [Node] public ISprite2D CloudsSprite { get; set; } = default!;
-    [Node] public ITimer Timer { get; set; } = default!;
     #endregion Nodes
 
     #region State
@@ -31,7 +33,7 @@ public partial class Planet : Node2D, IPlanet {
         _cloudsMaterial = (ShaderMaterial)CloudsSprite.GetMaterial();
 
         GenerateUniqueShaderMaterials();
-        SetSMParams("rotation_speed", RotationSpeed);
+        SetRotationSpeed(RotationSpeed);
     }
 
     public void SetRotationSpeed(float speed) {
@@ -40,8 +42,8 @@ public partial class Planet : Node2D, IPlanet {
     }
 
     private void GenerateUniqueShaderMaterials() {
-        var surfaceShader = (Shader)ResourceLoader.Load("res://src/features/planet/Planet.gdshader");
-        var cloudsShader = (Shader)ResourceLoader.Load("res://src/features/planet/Clouds.gdshader");
+        var surfaceShader = (Shader)ResourceLoader.Load(SURFACE_SHADER_PATH);
+        var cloudsShader = (Shader)ResourceLoader.Load(CLOUDS_SHADER_PATH);
 
         _surfaceMaterial = new ShaderMaterial {
             Shader = surfaceShader
@@ -55,7 +57,6 @@ public partial class Planet : Node2D, IPlanet {
     }
 
     private void SetSMParams(string param_name, float value) {
-        GD.Print("set to" + value);
         _surfaceMaterial.SetShaderParameter(param_name, value);
         _cloudsMaterial.SetShaderParameter(param_name, value);
     }
