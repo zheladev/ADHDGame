@@ -1,6 +1,5 @@
 namespace ADHDGame;
 
-using System;
 using System.Collections.Generic;
 
 using Chickensoft.AutoInject;
@@ -20,10 +19,10 @@ public partial class StarGenerator : Node2D, IStarGenerator {
     [Export] private float _galaxyRadius = 2000000f;
     [Export] private float _centerConcentration = 0.5f;
     [Export] private ulong _seed = 123456789;
-    [Export] private float minDistance = 20f; // TODO
+    [Export] private float _minDistance = 20f; // TODO
 
     private readonly RandomNumberGenerator _rng = new();
-    private List<Vector2> starPositions = new List<Vector2>();
+    private readonly List<Vector2> _starPositions = new();
 
     #region Nodes
     // AutoInjected child nodes go here.
@@ -64,32 +63,25 @@ public partial class StarGenerator : Node2D, IStarGenerator {
     // [Dependency] public IGameRepository GameRepository => this.DependOn<GameRepository>();
     #endregion Dependencies
 
-    public void Setup()
-    {
-        _rng.Seed = (ulong)_seed;
-        // instantiation of objects and context setup
-    }
+    public void Setup() => _rng.Seed = _seed;// instantiation of objects and context setup
 
-    public void OnReady()
-    {
-        GenerateStars();
-    }
+    public void OnReady() => GenerateStars();
 
     public void OnExitTree() { }
 
     private void GenerateStars() {
-        for (int i = 0; i < _starCount; i++) {
+        for (var i = 0; i < _starCount; i++) {
             // Generate polar coordinates
-            float angle = _rng.Randf() * 2 * Mathf.Pi;
-            float radius = GenerateRadius();
+            var angle = _rng.Randf() * 2 * Mathf.Pi;
+            var radius = GenerateRadius();
             // Vector2 position = GenerateStarPosition();
 
             // Convert to Cartesian coordinates
-            float x = radius * Mathf.Cos(angle);
-            float y = radius * Mathf.Sin(angle);
+            var x = radius * Mathf.Cos(angle);
+            var y = radius * Mathf.Sin(angle);
 
-            Star star = CreateRandomStar();
-            ulong starSeed = _seed + (ulong)i;
+            var star = CreateRandomStar();
+            var starSeed = _seed + (ulong)i;
             star.SetSeed(starSeed);
             // starPositions.Add(position);
             star.Position = new Vector2(x, y);
@@ -102,31 +94,27 @@ public partial class StarGenerator : Node2D, IStarGenerator {
 
     private float GenerateRadius() {
         // Normal distribution
-        float u1 = 1.0f - _rng.Randf();
-        float u2 = 1.0f - _rng.Randf();
-        float randStdNormal = Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Sin(2.0f * Mathf.Pi * u2);
-        float radius = Mathf.Abs(randStdNormal) * _galaxyRadius * _centerConcentration;
+        var u1 = 1.0f - _rng.Randf();
+        var u2 = 1.0f - _rng.Randf();
+        var randStdNormal = Mathf.Sqrt(-2.0f * Mathf.Log(u1)) * Mathf.Sin(2.0f * Mathf.Pi * u2);
+        var radius = Mathf.Abs(randStdNormal) * _galaxyRadius * _centerConcentration;
 
         // Radius doesn't exceed galaxy size
         return Mathf.Min(radius, _galaxyRadius);
     }
 
-    private Vector2 GenerateStarPosition()
-    {
+    private Vector2 GenerateStarPosition() {
         Vector2 position;
         bool isValidPosition;
 
-        do
-        {
-            float angle = _rng.RandfRange(0, 2 * Mathf.Pi);
-            float radius = _rng.RandfRange(0, _galaxyRadius);
+        do {
+            var angle = _rng.RandfRange(0, 2 * Mathf.Pi);
+            var radius = _rng.RandfRange(0, _galaxyRadius);
             position = new Vector2(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle));
 
             isValidPosition = true;
-            foreach (Vector2 existingPosition in starPositions)
-            {
-                if (position.DistanceTo(existingPosition) < minDistance)
-                {
+            foreach (var existingPosition in _starPositions) {
+                if (position.DistanceTo(existingPosition) < _minDistance) {
                     isValidPosition = false;
                     break;
                 }
@@ -137,7 +125,7 @@ public partial class StarGenerator : Node2D, IStarGenerator {
     }
 
     private Star CreateRandomStar() {
-        float starType = _rng.Randf();
+        var starType = _rng.Randf();
 
         if (starType < 0.0001f) // O-type (0.01%)
         {

@@ -2,12 +2,10 @@ namespace ADHDGame;
 
 using Godot;
 
-public partial class StarG : Star
-{
-    public StarG()
-    {
+public partial class StarG : Star {
+    public StarG() {
         StarColor = new Color("#FFC300");
-        Radius = GenerateRadius(0.96f, 1.15f) * starScaling;
-        PlanetSystemRadius = 50f * starScaling;
+        Radius = GenerateRadius(0.96f, 1.15f) * STAR_SCALING;
+        PlanetSystemRadius = 50f * STAR_SCALING;
     }
 }

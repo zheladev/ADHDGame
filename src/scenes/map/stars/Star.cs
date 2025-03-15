@@ -1,6 +1,5 @@
 namespace ADHDGame;
 
-using System;
 using System.Collections.Generic;
 
 using Chickensoft.AutoInject;
@@ -8,8 +7,7 @@ using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
 
-public interface IStar : INode2D
-{
+public interface IStar : INode2D {
     public Color StarColor { get; set; }
     public float Radius { get; set; }
 
@@ -20,11 +18,10 @@ public interface IStar : INode2D
 }
 
 [Meta(typeof(IAutoNode))]
-public abstract partial class Star : Node2D, IStar
-{
+public abstract partial class Star : Node2D, IStar {
     public override void _Notification(int what) => this.Notify(what);
 
-    private RandomNumberGenerator rng { get; set; } = new();
+    private RandomNumberGenerator Rng { get; set; } = new();
 
     [Export] public Color StarColor { get; set; }
     [Export] public float Radius { get; set; }
@@ -32,7 +29,7 @@ public abstract partial class Star : Node2D, IStar
     [Export] public float PlanetSystemRadius { get; set; }
     public List<Planet> Planets { get; set; } = new List<Planet>();
 
-    protected const float starScaling = 695f;   // base unit is 10^3 km
+    protected const float STAR_SCALING = 695f;   // base unit is 10^3 km
 
     #region Nodes
     // AutoInjected child nodes go here.
@@ -73,8 +70,7 @@ public abstract partial class Star : Node2D, IStar
     // [Dependency] public IGameRepository GameRepository => this.DependOn<GameRepository>();
     #endregion Dependencies
 
-    public void Setup()
-    {
+    public void Setup() {
         // instantiation of objects and context setup
     }
 
@@ -82,31 +78,23 @@ public abstract partial class Star : Node2D, IStar
 
     public void OnExitTree() { }
 
-    public override void _Draw()
-    {
+    public override void _Draw() {
         DrawCircle(Vector2.Zero, Radius, StarColor);
         DrawCircle(Vector2.Zero, PlanetSystemRadius, new Color(1, 1, 1, 0.1f));
     }
 
-    public void SetSeed(ulong seed) {
-        rng.Seed = seed;
-    }
+    public void SetSeed(ulong seed) => Rng.Seed = seed;
 
-    public float GenerateRadius(float minRadius, float maxRadius)
-    {
-        return rng.RandfRange(minRadius, maxRadius);
-    }
+    public float GenerateRadius(float minRadius, float maxRadius) => Rng.RandfRange(minRadius, maxRadius);
 
-    public void GeneratePlanetarySystem()
-    {
-        int planetCount = rng.RandiRange(1, 8);
-        for (int i = 0; i < planetCount; i++)
-        {
-            Vector2 position = GeneratePlanetPosition();
-            float orbitalDistance = position.Length();
-            float planetRadius = rng.RandfRange(10, 100);
+    public void GeneratePlanetarySystem() {
+        var planetCount = Rng.RandiRange(1, 8);
+        for (var i = 0; i < planetCount; i++) {
+            var position = GeneratePlanetPosition();
+            var orbitalDistance = position.Length();
+            var planetRadius = Rng.RandfRange(10, 100);
 
-            Planet planet = new Planet{
+            var planet = new Planet {
                 Radius = planetRadius,
                 OrbitalDistance = orbitalDistance,
                 Position = position,
@@ -118,11 +106,10 @@ public abstract partial class Star : Node2D, IStar
         }
     }
 
-    private Vector2 GeneratePlanetPosition()
-    {
-        float angle = rng.RandfRange(0, 2 * Mathf.Pi);
-        float radius = rng.RandfRange(Radius, PlanetSystemRadius); // Distancia en UA
-        Vector2 position = new Vector2(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle));
+    private Vector2 GeneratePlanetPosition() {
+        var angle = Rng.RandfRange(0, 2 * Mathf.Pi);
+        var radius = Rng.RandfRange(Radius, PlanetSystemRadius); // Distancia en UA
+        var position = new Vector2(radius * Mathf.Cos(angle), radius * Mathf.Sin(angle));
 
         return position;
     }

@@ -5,24 +5,22 @@ using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
 
-public interface IMapCamera : ICamera2D
-{
+public interface IMapCamera : ICamera2D {
     // Define exposed functions and properties here.
 }
 
 [Meta(typeof(IAutoNode))]
-public partial class MapCamera : Camera2D, IMapCamera
-{
+public partial class MapCamera : Camera2D, IMapCamera {
     public override void _Notification(int what) => this.Notify(what);
 
-    [Export] private float minZoom = 0.00048828125f;
-    [Export] private float maxZoom = 512.0f; 
-    [Export] private float dragSlowdown = 0.7f;
-    [Export] private float smoothness = 12.0f;
+    [Export] private float _minZoom = 0.00048828125f;
+    [Export] private float _maxZoom = 512.0f;
+    [Export] private float _dragSlowdown = 0.7f;
+    [Export] private float _smoothness = 12.0f;
 
-    private bool isDragging = false;
-    private Vector2 dragStartPosition;
-    private Vector2 targetPosition;
+    private bool _isDragging;
+    private Vector2 _dragStartPosition;
+    private Vector2 _targetPosition;
 
     #region Nodes
     // AutoInjected child nodes go here.
@@ -63,8 +61,7 @@ public partial class MapCamera : Camera2D, IMapCamera
     // [Dependency] public IGameRepository GameRepository => this.DependOn<GameRepository>();
     #endregion Dependencies
 
-    public void Setup()
-    {
+    public void Setup() {
         // instantiation of objects and context setup
     }
 
@@ -72,64 +69,55 @@ public partial class MapCamera : Camera2D, IMapCamera
 
     public void OnExitTree() { }
 
-    public override void _Process(double delta)
-    {
+    public override void _Process(double delta) {
         HandleZoom();
         HandleDrag(delta);
         FollowTarget(delta);
     }
 
-    private void HandleZoom()
-    {
+    private void HandleZoom() {
 
         // Increase zoom
-        if (Input.IsActionJustReleased("ui_zoom_in"))
-        {
-            float zoomFactor = 2f;
+        if (Input.IsActionJustReleased("ui_zoom_in")) {
+            var zoomFactor = 2f;
             Zoom = new Vector2(Zoom.X * zoomFactor, Zoom.Y * zoomFactor);
         }
 
         // Reduce zoom
-        if (Input.IsActionJustReleased("ui_zoom_out"))
-        {
-            float zoomFactor = 2f;
+        if (Input.IsActionJustReleased("ui_zoom_out")) {
+            var zoomFactor = 2f;
             Zoom = new Vector2(Zoom.X / zoomFactor, Zoom.Y / zoomFactor);
         }
 
         Zoom = new Vector2(
-            Mathf.Clamp(Zoom.X, minZoom, maxZoom),
-            Mathf.Clamp(Zoom.Y, minZoom, maxZoom)
+            Mathf.Clamp(Zoom.X, _minZoom, _maxZoom),
+            Mathf.Clamp(Zoom.Y, _minZoom, _maxZoom)
         );
 
     }
 
-    private void HandleDrag(double delta)
-    {
+    private void HandleDrag(double delta) {
 
-        if (Input.IsActionJustPressed("ui_right_click"))
-        {
-            isDragging = true;
-            dragStartPosition = GetViewport().GetMousePosition();
+        if (Input.IsActionJustPressed("ui_right_click")) {
+            _isDragging = true;
+            _dragStartPosition = GetViewport().GetMousePosition();
         }
 
-        if (Input.IsActionJustReleased("ui_right_click"))
-        {
-            isDragging = false;
+        if (Input.IsActionJustReleased("ui_right_click")) {
+            _isDragging = false;
         }
 
-        if (isDragging)
-        {
-            Vector2 dragCurrentPosition = GetViewport().GetMousePosition();
-            Vector2 dragOffset = dragStartPosition - dragCurrentPosition;
-            Vector2 worldOffset = (dragOffset / Zoom) * dragSlowdown;
-            targetPosition += worldOffset;
-            dragStartPosition = GetViewport().GetMousePosition();
+        if (_isDragging) {
+            var dragCurrentPosition = GetViewport().GetMousePosition();
+            var dragOffset = _dragStartPosition - dragCurrentPosition;
+            var worldOffset = dragOffset / Zoom * _dragSlowdown;
+            _targetPosition += worldOffset;
+            _dragStartPosition = GetViewport().GetMousePosition();
         }
     }
 
-    private void FollowTarget(double delta)
-    {
-        float t = smoothness * (float)delta;
-        Position = Position.Lerp(targetPosition, t);
+    private void FollowTarget(double delta) {
+        var t = _smoothness * (float)delta;
+        Position = Position.Lerp(_targetPosition, t);
     }
 }

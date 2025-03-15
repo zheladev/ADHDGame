@@ -16,6 +16,7 @@ offset_bottom = 69.6667
 text = "Settings Menu"
 
 [node name="Label2" type="Label" parent="."]
+layout_mode = 0
 offset_left = 192.0
 offset_top = 159.0
 offset_right = 499.0
