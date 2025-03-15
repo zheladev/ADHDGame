@@ -5,14 +5,16 @@ using Chickensoft.GodotNodeInterfaces;
 using Chickensoft.Introspection;
 using Godot;
 
-public interface IPlanet : INode2D {
+public interface IPlanetTest : INode2D
+{
     public float Radius { get; set; }
     public float OrbitalDistance { get; set; }
     public Vector2 StarPosition { get; set; }
 }
 
 [Meta(typeof(IAutoNode))]
-public partial class Planet : Node2D, IPlanet {
+public partial class PlanetTest : Node2D, IPlanetTest
+{
     public float Radius { get; set; }
     public float OrbitalDistance { get; set; }
     public Vector2 StarPosition { get; set; }
@@ -56,7 +58,8 @@ public partial class Planet : Node2D, IPlanet {
     // [Dependency] public IGameRepository GameRepository => this.DependOn<GameRepository>();
     #endregion Dependencies
 
-    public void Setup() {
+    public void Setup()
+    {
         // instantiation of objects and context setup
     }
 
@@ -64,7 +67,8 @@ public partial class Planet : Node2D, IPlanet {
 
     public void OnExitTree() { }
 
-    public override void _Draw() {
+    public override void _Draw()
+    {
         DrawCircle(Vector2.Zero, Radius, Colors.Pink);
         DrawArc(StarPosition - Position, OrbitalDistance, 0, 2 * Mathf.Pi, 100, Colors.White, 1, true);
     }
