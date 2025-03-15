@@ -1,0 +1,45 @@
+[gd_scene load_steps=8 format=3 uid="uid://0jwv0d6ygl7u"]
+
+[ext_resource type="Script" uid="uid://ctbecebv5mb8s" path="res://src/features/planet/Planet.cs" id="1_5jap0"]
+[ext_resource type="Shader" uid="uid://bvju57kqkjhnc" path="res://src/features/planet/Planet.gdshader" id="1_lr6jt"]
+[ext_resource type="Texture2D" uid="uid://cjj65toeir5eu" path="res://assets/texture_earth.png" id="2_induo"]
+[ext_resource type="Texture2D" uid="uid://cigjo4mt1bttr" path="res://assets/texture_clouds.png" id="3_induo"]
+[ext_resource type="Shader" uid="uid://bt438xp8xocog" path="res://src/features/planet/Clouds.gdshader" id="3_lr6jt"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lr6jt"]
+shader = ExtResource("1_lr6jt")
+shader_parameter/aspect_ratio = 2.0
+shader_parameter/rotation_speed = 0.02
+shader_parameter/as_shadow = false
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_5jap0"]
+shader = ExtResource("3_lr6jt")
+shader_parameter/aspect_ratio = 2.0
+shader_parameter/rotation_speed = 0.02
+shader_parameter/as_shadow = false
+
+[node name="Planet" type="Node2D"]
+script = ExtResource("1_5jap0")
+RotationSpeed = 200.0
+
+[node name="SurfaceSprite" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+texture_filter = 1
+texture_repeat = 2
+material = SubResource("ShaderMaterial_lr6jt")
+scale = Vector2(0.5, 1)
+texture = ExtResource("2_induo")
+
+[node name="CloudsSprite" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+texture_filter = 1
+texture_repeat = 2
+material = SubResource("ShaderMaterial_5jap0")
+scale = Vector2(0.26001, 0.520019)
+texture = ExtResource("3_induo")
+
+[node name="Timer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 1.5
+one_shot = true
+autostart = true

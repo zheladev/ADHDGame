@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://dm1cp8berlnc4"]
+[gd_scene load_steps=4 format=3 uid="uid://dm1cp8berlnc4"]
 
 [ext_resource type="Script" uid="uid://bc4x0lh7v7vhy" path="res://src/scenes/init_menu/splash_screen/SplashScreen.cs" id="1_0h33m"]
 [ext_resource type="Texture2D" uid="uid://bx603oua0dw45" path="res://assets/ship_test.png" id="1_qjrpf"]
+[ext_resource type="PackedScene" uid="uid://0jwv0d6ygl7u" path="res://src/features/planet/Planet.tscn" id="3_1dhix"]
 
 [node name="SplashScreen" type="Node2D"]
 script = ExtResource("1_0h33m")
@@ -26,3 +27,13 @@ unique_name_in_owner = true
 wait_time = 1.5
 one_shot = true
 autostart = true
+
+[node name="PlanetLeft" parent="." instance=ExtResource("3_1dhix")]
+unique_name_in_owner = true
+position = Vector2(113, 143)
+scale = Vector2(0.2, 0.2)
+
+[node name="PlanetRight" parent="." instance=ExtResource("3_1dhix")]
+unique_name_in_owner = true
+position = Vector2(580, 142)
+scale = Vector2(0.2, 0.2)
