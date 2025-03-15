@@ -29,12 +29,29 @@ public partial class Planet : Node2D, IPlanet {
     public void OnReady() {
         _surfaceMaterial = (ShaderMaterial)SurfaceSprite.GetMaterial();
         _cloudsMaterial = (ShaderMaterial)CloudsSprite.GetMaterial();
+
+        GenerateUniqueShaderMaterials();
         SetSMParams("rotation_speed", RotationSpeed);
     }
 
     public void SetRotationSpeed(float speed) {
         RotationSpeed = speed;
         SetSMParams("rotation_speed", speed);
+    }
+
+    private void GenerateUniqueShaderMaterials() {
+        var surfaceShader = (Shader)ResourceLoader.Load("res://src/features/planet/Planet.gdshader");
+        var cloudsShader = (Shader)ResourceLoader.Load("res://src/features/planet/Clouds.gdshader");
+
+        _surfaceMaterial = new ShaderMaterial {
+            Shader = surfaceShader
+        };
+        SurfaceSprite.SetMaterial(_surfaceMaterial);
+
+        _cloudsMaterial = new ShaderMaterial {
+            Shader = cloudsShader
+        };
+        CloudsSprite.SetMaterial(_cloudsMaterial);
     }
 
     private void SetSMParams(string param_name, float value) {
