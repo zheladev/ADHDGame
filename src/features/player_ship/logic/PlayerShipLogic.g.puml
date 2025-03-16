@@ -1,6 +1,0 @@
-@startuml PlayerShipLogic
-state "PlayerShipLogic State" as ADHDGame_Features_PlayerShip_PlayerShipLogic_State {
-  state "Idle" as ADHDGame_Features_PlayerShip_PlayerShipLogic_State_Idle
-}
-[*] --> ADHDGame_Features_PlayerShip_PlayerShipLogic_State_Idle
-@enduml
